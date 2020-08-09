@@ -8,5 +8,3 @@ websocket_urlpatterns = [
     path('ws/quizapp/host/<sessionID>/', consumers.HostConsumer),
     path('ws/quizapp/client/<sessionID>/', consumers.ClientConsumer),
 ]
-
-

@@ -1,0 +1,113 @@
+body{
+	background: radial-gradient(1.5em 6.28571em at 1.95em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 0 0, radial-gradient(1.5em 6.28571em at -0.45em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 1.5em 5.5em, radial-gradient(2.3em 4.57143em at 2.99em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.3) 55%, rgba(255, 255, 255, 0) 55%) 0 0, radial-gradient(2.3em 4.57143em at -0.69em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0.3) 55%, rgba(255, 255, 255, 0) 55%) 2.3em 4em, radial-gradient(3.5em 6.28571em at 4.55em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 0 0, radial-gradient(3.5em 6.28571em at -1.05em, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.25) 50%, rgba(255, 255, 255, 0.25) 55%, rgba(255, 255, 255, 0) 55%) 3.5em 5.5em, radial-gradient(#15ffa5, #00ced1);
+  	background-color: mediumspringgreen;
+  	background-size: 1.5em 11em, 1.5em 11em, 2.3em 8em, 2.3em 8em, 3.5em 11em, 3.5em 11em, 100% 100%;
+  	background-repeat: repeat;
+}
+
+
+header{
+    background-color: #54a8b2; 
+    top: 0; 
+	width: 100%;
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+
+
+
+.header-link {
+    float: right;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    margin: 25px 5px 25px 10px;
+	background: #10223B;
+    text-decoration: none;
+	border: 1px solid #4a6899;
+}
+
+.header-link:hover{
+	background: #294277;
+}
+
+.no-underline {
+	text-decoration: none;
+}
+
+header section{
+	display: flex;
+	justify-content: flex-end;
+}
+
+footer img{
+	position: fixed;
+	width: 200px;
+	height: 200px;
+	right: 0px;
+	bottom: 0px;
+}
+
+/* CSS FOR HOMEPAGE BUTTONS  */
+
+section{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-evenly;
+	padding: 5px;
+	text-align: center;
+	width: 100%;
+}
+.box-button{
+	background: #10223B;
+	padding: 50px;
+	margin-top: 30px;
+	line-height: 150px;
+ 	color: white;
+  	font-weight: bold;
+  	font-size: 3em;
+  	text-align: center;	
+}
+
+.box-button:hover{
+	background: #294277;
+}
+
+.answer-button{
+	background: #10223B;
+	padding: 50px;
+	margin-top: 30px;
+	line-height: 150px;
+ 	color: white;
+  	font-size: 1em;
+  	text-align: center;	
+}
+
+.next-button{
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    margin: 25px 5px 25px 10px;
+	background: #10223B;
+    text-decoration: none;
+	border: 1px solid #4a6899;	
+}
+
+.answer-button:hover{
+	background: #294277;
+}
+
+.next-button:hover{
+	background: #294277;
+}
+
+.wrapper{
+	display: flex;
+	flex-flow: row wrap;
+	margin: 10%; 
+}
+

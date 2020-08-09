@@ -1,0 +1,49 @@
+article section{
+	display: flex;
+	flex-direction: row;
+	text-align: center;
+	justify-content: space-evenly;
+}
+
+article{
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	justify-content: space-evenly;	
+}
+
+.boxpadded{
+	flex-grow: 1;
+	margin: 10px;
+	padding: 10px;
+	border-radius: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: darkblue;
+	background-color: #54A8B2;
+}
+
+.quizpadded{
+	margin: 10px;
+	padding: 10px;
+	border-radius: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: darkblue;
+	background-color: #54A8B2;
+	width: 30%;
+	word-break: break-all;
+	white-space: normal;
+}
+
+
+
+.boxcenter{
+
+	margin: 1% 20% 1% 20%;
+	border-radius: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: darkblue;
+	background-color: #54A8B2;
+}

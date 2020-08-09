@@ -47,6 +47,7 @@ class Session(models.Model):
     _hostChannelName = models.CharField(max_length=255)
     _questionCounter = models.IntegerField(default = -1)
     _currentVotes = models.IntegerField(default = 0)
+    _sessionState = models.TextField(max_length= 20, default = 'start')
 
     def getQuiz(self):
         return self._quiz
@@ -63,6 +64,47 @@ class Session(models.Model):
         else:
             return False
 
+    def updateQuestion(self, updatedQuestion):
+        question = self._quiz.question_set.get(id = updatedQuestion['questionID'])
+        question.answer_set.all().delete()
+        question.setQuestionText(updatedQuestion['questionText'])
+        for answer in updatedQuestion['answers']:
+            question.addAnswer(answer['answerText'], answer['correct'], int(answer['points']))
+        self._currentVotes = 0
+        question.save()
+        self.save()
+    
+    def addQuestion(self, newQuestion):
+        question = self._quiz.question_set.create(_questionText = newQuestion['questionText'])
+        for answer in newQuestion['answers']:
+            question.addAnswer(answer['answerText'], answer['correct'], int(answer['points']))
+        question.save()
+
+    def deleteQuestion(self):
+        question = self._quiz.question_set.order_by('id')[self._questionCounter]
+        question.delete()
+        numberOfQuestions = self._quiz.question_set.count()
+        if self._questionCounter < numberOfQuestions:
+            try:
+                nextQ = self._quiz.question_set.order_by('id')[self._questionCounter]
+            except IndexError:
+                print("Something Went Wrong, I Couldn't Get That Question.")
+                return -1
+            self._currentVotes = 0
+            self.save()
+            return nextQ
+        return False
+
+    def advanceQuestion(self):
+        self._questionCounter += 1
+        self._currentVotes = 0
+        self.save()
+
+    def skipQuestion(self):
+        self._questionCounter += 1
+        self._currentVotes = 0
+        self.save()
+
     def increaseVotes(self, userID, answerID):
         answer = Answer.objects.get(id = answerID)
         user = self.anonymoususer_set.get(_userID = userID)
@@ -71,8 +113,27 @@ class Session(models.Model):
         user.setPreviousCorrect(answer.isCorrect())
         self._currentVotes += 1
         self.save()
-        
-        def getUser(self, userID):
+
+    def userExists(self, userID):
+        try:
+            self.anonymoususer_set.get(_userID=userID)
+            return True
+        except AnonymousUser.DoesNotExist:
+            False
+
+    def addUser(self, userID, channelName):
+        user = AnonymousUser.objects.create(_session = self, _userID = userID, _userChannelName = channelName)
+        user.save()
+        return user
+
+    def clearAnswers(self):
+        questions = list(self._quiz.question_set.all())
+        for question in questions:
+            answers = list(question.answer_set.all())
+            for answer in answers:
+                answer.clear()
+    
+    def getUser(self, userID):
         return self.anonymoususer_set.get(_userID = userID)
 
     def getResults(self):
@@ -115,8 +176,7 @@ class Session(models.Model):
         return self.anonymoususer_set.all()
 
     def getOwner(self):
-        return self._owner    
-        
+        return self._owner
 
 
 class AnonymousUser(models.Model):
@@ -150,14 +210,16 @@ class AnonymousUser(models.Model):
 
     def setPreviousCorrect(self, correct):
         self._previousCorrect = correct
-        self.save()    
-    
+        self.save()
+
+
+
 
 class Question(models.Model):
 
     _quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
     _questionText = models.CharField(max_length=200)
-
+    
     def getQuestionText(self):
         return self._questionText
 
@@ -173,7 +235,11 @@ class Question(models.Model):
         
     def __str__(self):
         return self._questionText
-    
+
+
+
+
+
 
 class Answer(models.Model):
     _question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -208,4 +274,9 @@ class Answer(models.Model):
     
     def __str__(self):
         return self._text
+
+    def clear(self):
+        self._votes = 0
+        self.save()
+
 
