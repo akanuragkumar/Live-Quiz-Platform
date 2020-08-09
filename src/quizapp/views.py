@@ -13,7 +13,6 @@ from .forms import CreateQuizForm, CreateAnswerForm, JoinQuizForm
 from .models import Quiz    
 # Create your views here.
 
-
 def joinQuiz(request):
     if request.method == 'POST':
         form = JoinQuizForm(request.POST)
@@ -21,11 +20,11 @@ def joinQuiz(request):
             sessionId = form.cleaned_data.get('sessionId')
             sessionIdUpper = sessionId.upper()
             if Session.objects.filter(_sessionID=sessionIdUpper).exists():
-                return redirect(reverse('quizapp:roomJoin'))
+                return redirect(reverse('quizapp:roomJoin', kwargs={'room_name': sessionIdUpper}))
             
     
     form = JoinQuizForm()
-    return render(request, {'form': form})
+    return render(request, 'quizapp/joinquiz.html', {'form': form})
 
 def roomJoin(request, room_name):
     session = Session.objects.get(_sessionID=room_name)
@@ -43,8 +42,17 @@ def roomJoin(request, room_name):
 def teacherView(request, room_name):
     session = Session.objects.get(_sessionID=room_name)
     quizName = session.getQuiz().getQuizName()
-    return render(request,{'quizName': quizName, 'room_name_json': room_name})
+    return render(request, {'quizName': quizName, 'room_name_json': room_name})
 
+#Login View is handled by django, as well as logout, and password vies. you do need to create the html templates for each, but it handles the rest. Django authentication is described here https://docs.djangoproject.com/en/2.1/topics/auth/default/
+
+#login_required tells django to look for user authentication in the request, if not it redirects you to the login page.
+@login_required
+def profile(request):
+    user = request.user
+    username = user.username
+    quizzes = user.quiz_set.all()
+    return render(request,{'username': username, 'quizzes': quizzes})
 
 def createAccount(request):
     if request.method == 'GET':
@@ -63,37 +71,6 @@ def createAccount(request):
     return render(request,{'form': form})
 
 
-
-@login_required
-def deleteQuiz(request):
-    if request.method == 'POST':
-        quizID = int(request.POST['quizID'])
-        quiz = request.user.quiz_set.get(id = quizID)
-        quiz.delete()
-    return redirect(reverse('quizapp:profile'))
-
-@login_required
-def deleteQuestion(request):
-    if request.method == 'POST':
-        questionID = int(request.POST.get('questionID'))
-        quizID = int(request.POST.get('quizID'))
-        quiz = request.user.quiz_set.get(id = quizID)
-        question = quiz.question_set.get(id = questionID)
-        question.delete()
-    return redirect(reverse('quizapp:editQuiz'))
-
-@login_required
-def deleteAnswer(request):
-    if request.method == 'POST':
-        questionID = int(request.POST.get('questionID'))
-        quizID = int(request.POST.get('quizID'))
-        answerID = int(request.POST.get('answerID'))
-        quiz = request.user.quiz_set.get(id = quizID)
-        question = quiz.question_set.get(id = questionID)
-        answer = question.answer_set.get(id = answerID)
-        answer.delete()
-    return redirect(reverse('quizapp:editQuestion'))
-
 @login_required
 def createQuiz(request):
     user = request.user
@@ -104,90 +81,11 @@ def createQuiz(request):
             quizDes = form.cleaned_data.get('quizDescription')
             quiz = Quiz(_owner = user, _quizName = quizName, _quizDescription = quizDes)
             quiz.save()
-            return redirect(reverse('quizapp:editQuiz'))
+            return redirect(reverse('quizapp:editQuiz', kwargs={'quizID':quiz.id}))
     else:
         form = CreateQuizForm()
     username = user.username
-    return render(request, 'quizapp/createquiz.html')
-
-
-@login_required
-def editQuiz(request, quizID):
-    user = request.user
-    quiz = user.quiz_set.get(id = quizID)
-    
-    if request.method == 'POST':
-        if 'quizButton' in request.POST or 'finishButton' in request.POST:
-            form = CreateQuizForm(request.POST)
-            if form.is_valid():
-                quiz.setQuizName(form.cleaned_data.get('quizName'))
-                quiz.setQuizDescription(form.cleaned_data.get('quizDescription'))
-                quiz.save()
-    
-        elif 'questionButton' in request.POST:
-            if request.POST.get('questionText', False):
-                questionText = request.POST['questionText']
-                if not questionText.isspace():
-                    quiz.question_set.create(_questionText = questionText)
-
-        if 'finishButton' in request.POST:
-            return redirect(reverse('quizapp:profile'))
-        return redirect(reverse('quizapp:editQuiz'))
-    else:
-        form = CreateQuizForm(initial = {'quizName': quiz.getQuizName(), 'quizDescription': quiz.getQuizDescription()})
-
-    questions = quiz.question_set.all()
-    return render(request, {'username': user.username, 'quiz':quiz, 'questions': questions, 'form': form})
-
-@login_required
-def editQuestion(request, quizID, questionID):
-    user = request.user
-    quiz = user.quiz_set.get(id = quizID)
-    question = quiz.question_set.get(id = questionID)
-    
-    if request.method == 'POST':
-        if 'answerButton' in request.POST:
-            form = CreateAnswerForm(request.POST)
-            if form.is_valid():
-                answerText = form.cleaned_data.get('answerText')
-                correct = form.cleaned_data.get('isCorrect')
-                points = form.cleaned_data.get('pointValue', 0)
-                question.answer_set.create(_text = answerText, _correct = correct, _pointValue = points)
-        elif 'questionButton' in request.POST or 'finishButton' in request.POST:
-            if request.POST.get('questionText', False):
-                questionText = request.POST['questionText']
-                if not questionText.isspace():
-                    question.setQuestionText(questionText)
-                    question.save()
-                    
-        if 'finishButton' in request.POST:
-            return redirect(reverse('quizapp:editQuiz'))
-        return redirect(reverse('quizapp:editQuestion'))
-    else:
-        form = CreateAnswerForm()
-
-    answers = question.answer_set.all()
-    return render(request, {'username': user.username,'quizID':quiz.id, 'question': question, 'answers': answers, 'form': form})
-
-@login_required
-def editAnswer(request, quizID, questionID, answerID):
-    user = request.user
-    quiz = user.quiz_set.get(id = quizID)
-    question = quiz.question_set.get(id = questionID)
-    answer = question.answer_set.get(id = answerID)
-    
-    if request.method == 'POST':
-        form = CreateAnswerForm(request.POST)
-        if form.is_valid():
-            answer.setText(form.cleaned_data.get('answerText'))
-            answer.setCorrect(form.cleaned_data.get('isCorrect'))
-            answer.setPointValue(form.cleaned_data.get('pointValue', 0))
-            answer.save()           
-        return redirect(reverse('quizapp:editQuestion'))
-    else:
-        form = CreateAnswerForm(initial = {'answerText': answer.getText(), 'isCorrect': answer.isCorrect() , 'pointValue': answer.getPointValue()})
-
-    return render(request, {'username': user.username,'quizID':quiz.id, 'questionID': question.id, 'answer': answer, 'form': form})
+    return render(request, {'username': username, 'form': form})
 
 
 @login_required
@@ -197,4 +95,4 @@ def startQuiz(request, quizID):
     session = quiz.session_set.create(_owner = user.id)
     session.clearAnswers()
     sessionID = session.idGen()
-    return redirect(reverse('quizapp:roomMain'))
+    return redirect(reverse('quizapp:roomMain', kwargs={'room_name': sessionID}))
