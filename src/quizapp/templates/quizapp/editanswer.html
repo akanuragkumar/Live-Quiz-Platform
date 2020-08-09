@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang=en>
+    
+<head>
+    <title>Edit Answer</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quizapp/css/style.css' %}">
+    <link rel = "stylesheet" href="{% static 'quizapp/css/login.css' %}"/>
+</head>
+<body style = "text-align: center"></body>
+
+    {% include "quizapp/partials/header.html" %}
+
+    <main>
+        <article class = 'boxcenter', id = 'answerList'>
+                <p>    
+                    <article >
+                        <form action = "{% url 'quizapp:editQuestion' quizID questionID %}" style = 'display: inline' id = "editQuestion"> </form>
+                        <form id = 'answerForm' action = "{% url 'quizapp:editAnswer' quizID questionID answer.id %}", method ='post'>
+                            <section>
+                                {% csrf_token %}
+                                <article>
+                                    <p>
+                                        {{form.answerText.label_tag}}<br>
+                                        {{form.answerText}}
+                                        
+                                    </p>
+                                    <p>
+                                        {{form.isCorrect.label_tag}}
+                                        {{form.isCorrect}}
+                                    </p>
+                                    <p>
+                                        {{form.pointValue.label_tag}}
+                                        {{form.pointValue}}
+                                    </p>
+                                </article>
+                                <article>
+                                    <p>
+                                        {{form.answerText.help_text}}
+                                    </p>
+                                </article>
+                            
+                            </section>
+                            <article>
+                                <button type = "submit" name = 'answerButton'> Save</button>
+                                <input type = 'submit' value = "Cancel" form = 'editQuestion'>
+                            </article>
+                        </form>
+                    </article>
+                </p>
+                <hr>
+                
+        </article>
+                    
+
+
+    </main>
+    {% include "quizapp/partials/footer.html" %}
+</body>
+
+</html>

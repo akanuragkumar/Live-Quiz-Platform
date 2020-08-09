@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang=en>
+    
+<head>
+    <title>Edit Question</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quizapp/css/style.css' %}">
+    <link rel = "stylesheet" href="{% static 'quizapp/css/login.css' %}"/>
+    <script type="text/javascript" src="{% static 'quizapp/scripts/editquestion.js' %}"></script>
+</head>
+<body style = "text-align: center"></body>
+
+    {% include "quizapp/partials/header.html" %}
+
+    <main>
+        <article class = 'box'>
+            <form action = "{% url 'quizapp:editQuestion' quizID question.id %}", method = 'post' id = 'questionForm'>
+                <p>
+                    {% csrf_token %}
+                    <label for = ' questionTextID' >Question:</label>            
+                    <input type = 'text' id = 'questionTextID', name = 'questionText', value = "{{question.getQuestionText}}">        
+                </p>
+            
+                <p>
+                    <button type = 'submit' name = 'questionButton'>Save</button>
+                    <button type = 'submit' name = "finishButton">Finish</button>
+                </p>
+            </form>
+        </article>
+
+        <section>
+
+            <article class = 'boxpadded',>
+               
+                <article >
+                    <form id = 'answerForm' action = "{% url 'quizapp:editQuestion' quizID question.id %}", method ='post'>
+                                
+                                <article>
+                                    <p>
+                                        Create 
+                                        {{form.answerText.label_tag}}<br>
+                                        {{form.answerText}}<br>
+                                        {{form.answerText.help_text}}
+                                        
+                                    </p>
+                                    <p>
+                                        {{form.isCorrect.label_tag}}
+                                        {{form.isCorrect}}
+                                    </p>
+                                    <p>
+                                        {{form.pointValue.label_tag}}
+                                        {{form.pointValue}}
+                                    </p>
+                                </article>
+                                    
+                            <article>
+                                <button type = "submit" name = 'answerButton'> Submit</button>
+                                <button type = "button" onclick = cancelAdd()>Cancel</button>
+                            </article>
+                            {% csrf_token %}
+                        </form>
+                    </article>
+                
+            </article>
+
+
+
+        <article class = 'boxpadded', id = 'answerList' style = 'flex-grow:2; justify-content: flex-start'>
+
+            Answers
+            
+            {% if answers %}
+            {% for answer in answers %}
+            <article >
+                <article style = "align-items: flex-end">
+                    <form action = "{% url 'quizapp:editAnswer' quizID question.id answer.id %}" method = 'get' id = {{answer.id}}></form>
+
+                    <form action = "{% url 'quizapp:deleteAnswer' %}", method = 'post' style = 'display: inline; margin: 10px'>
+                        {{answer.getText}}
+                        {% csrf_token %}
+                        <input type='hidden' value= {{quizID}} name='quizID'>
+                        <input type='hidden' value= {{question.id}} name='questionID'>                       <input type='hidden' value= {{answer.id}} name='answerID'>
+                        <button type = 'submit'>Delete Answer</button>
+                        <input type = 'submit' value = "Edit Answer" form = {{answer.id}}>
+                    </form>
+                </article>
+            </article> 
+            {% endfor %}
+            {% endif %}
+        </article>
+                    
+        </section>
+
+
+    </main>
+    {% include "quizapp/partials/footer.html" %}
+</body>
+
+</html>

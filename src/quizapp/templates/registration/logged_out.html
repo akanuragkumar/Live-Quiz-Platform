@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang=en>
+
+<head>
+    <title>Logged Out</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quizapp/css/style.css' %}">
+    <link rel = 'stylesheet' href="{% static 'quizapp/css/login.css' %}"/>
+</head>
+            
+<body>
+
+    {% include "quizapp/partials/header.html" %}
+
+    <main style = 'text-align: center'>
+
+        <h2>You successfully logged out!</h2>
+
+    </main>
+    {% include "quizapp/partials/footer.html" %}
+</body>
+
+
+</html>
