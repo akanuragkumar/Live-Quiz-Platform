@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quizapp/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'quizapp/css/question.css' %}">
+    <title>{{quizName}}</title>
+</head>
+<body>
+    {% include "quizapp/partials/header.html" %}
+    
+    <main></main>
+    <div id="overlay-vote-box">
+        <img id="points" src="{% static 'quizapp/images/points.png' %}">
+    </div>
+
+    <div style = 'position: fixed; font-size: 30px; left: 0px; bottom: 0px;'>
+        {{room_name_json}}
+    </div>
+
+    {% include "quizapp/partials/footer.html" %}
+    <script src="{% static 'quizapp/scripts/teacherview.js' %}"></script>
+    <script>
+        connectToSocket('{{ room_name_json }}', '{{ quizName }}');
+        
+    </script>
+</body>
+</html>

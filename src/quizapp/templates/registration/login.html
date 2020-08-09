@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang=en>
+
+<head>
+    <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quizapp/css/style.css' %}">
+    <link rel = 'stylesheet' href="{% static 'quizapp/css/login.css' %}"/>
+</head>
+            
+<body>
+    {% include "quizapp/partials/header.html" %}
+            
+    <main>
+        <form action = "", method='post', style = 'text-align: center;' class = 'boxcenter'>
+            {% csrf_token %}
+                
+            <h2>Login</h2>
+            <p>
+                {{ form.username.label_tag }}<br>
+                {{ form.username }}<br>
+                <a href = #>Forgot your username?</a>
+            </p>
+                
+            <p>
+                {{ form.password.label_tag }}<br>
+                {{ form.password }}<br>
+                <a href = "{% url 'quizapp:password_reset' %}">Forgot your password?</a>
+            </p>
+                
+            <p>
+                <button type = "submit">
+                    Login
+                </button>
+            </p>
+            <p>
+                Don't have and account? 
+                <a href = "{% url 'quizapp:createAccount' %}">Signup</a>
+            </p>
+        </form>
+    </main>
+
+    {% include "quizapp/partials/footer.html" %}
+
+</body>
+
+
+</html>
+    

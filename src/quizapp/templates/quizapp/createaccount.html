@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang=en>
+
+<head>
+    <title>Sign Up</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quizapp/css/style.css' %}">
+    <link rel = "stylesheet" href="{% static 'quizapp/css/login.css' %}"/>
+</head>
+            
+<body>
+
+    {% include "quizapp/partials/header.html" %}
+
+    <article class = "boxcenter">
+
+        <h2>Sign up</h2>
+        <form method="post">
+            {% csrf_token %}
+            <section>
+
+                <article>
+                    <p>
+                        {{ form.username.label_tag }}<br>
+                        {{ form.username }}<br>
+                        {% for error in form.username.errors %}
+                        <div style="color: red">{{ error }}</div>
+                        {% endfor %}
+                    </p>
+                    
+                    <p>
+                        {{ form.password1.label_tag }}<br>
+                        {{ form.password1 }}<br>
+                    </p>
+                    {% for error in form.password1.errors %}
+                    <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+                    
+                    <p>
+                        {{ form.password2.label_tag }}<br>
+                        {{ form.password2 }}<br>
+                    </p>
+                    {% for error in form.password2.errors %}
+                    <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+                </article>
+                <article style = "text-align: left">
+                        <small style="color: black" >{{ form.username.help_text }}</small>
+                    <small style="color: black" >{{ form.password1.help_text }}</small>
+                </article>
+            </section>
+            
+            <p>
+                <button type="submit">Sign up</button>
+            </p>
+            <p>
+                Already have an account? <a href = "{% url 'quizapp:login' %}">Login</a>
+            </p>
+        </form>
+    </article>
+    {% include "quizapp/partials/footer.html" %}
+</body>
+
+
+</html>
+    

@@ -1,0 +1,28 @@
+<footer>
+    {% load static %}
+    <img id="live_quizPng" style="z-index:-5" src="{% static 'quizapp/images/live_quiz.png' %}"/>
+    <script>
+        let live_quizPng = document.getElementById("live_quizPng");
+        let live_quiz1 = document.getElementById("live_quiz1");
+        let live_quiz2 = document.getElementById("live_quiz2");
+        let live_quiz3 = document.getElementById("live_quiz3");
+        let live_quiz4 = document.getElementById("live_quiz4");
+        live_quizPng.onclick = function(){           
+            var randomNum = Math.random() * 4;
+            console.log(Math.floor(randomNum));
+            var floorNum = Math.floor(randomNum);
+            if(floorNum === 0){
+                live_quiz1.play();
+            }
+            if(floorNum === 1){
+                live_quiz2.play();
+            }
+            if(floorNum === 2){
+                live_quiz3.play();
+            }
+            if(floorNum === 3 || floorNum === 4){
+                live_quiz4.play();
+            }
+        }
+    </script>
+</footer>

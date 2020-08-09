@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang=en>
+    
+<head>
+    <title>Create Quiz</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'quizapp/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'quizapp/css/login.css' %}"/>
+</head>
+<body style = "text-align: center"></body>
+
+    {% include "quizapp/partials/header.html" %}
+
+    <main class = 'boxcenter'>
+        <article>
+            <form action = "{% url 'quizapp:createQuiz' %}", method = 'post'>
+            <section>
+                    {% csrf_token %}
+                    <article>
+                        <p>
+                            {{form.quizName.label_tag}}<br>
+                            {{form.quizName}}
+                        </p>
+                        <p>
+                            {{form.quizDescription.label_tag}}<br>
+                            {{form.quizDescription}}
+                        </p>
+                    </article>
+                    <article>
+                            <p>
+                                {{form.quizName.help_text}}
+                            </p>
+                            <p>
+                                {{form.quizDescription.help_text}}
+                            </p>
+                    </article>
+                   
+                    
+                </section>
+                <p><button type = "submit"> Create Quiz </button></p>
+            </form>
+        </article>
+    </main>
+    {% include "quizapp/partials/footer.html" %}
+</body>
+
+</html>

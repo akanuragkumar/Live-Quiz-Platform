@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang=en>
+    
+<head>
+    <title>Live Quiz</title>
+    {% load static %}
+        <link rel = 'stylesheet', type='text/css', href="{% static 'quizapp/css/style.css' %}"/>
+</head>
+
+<body>
+
+	{% include "quizapp/partials/header.html" %}
+		
+	<section>
+		<a class="no-underline" href="{% url 'quizapp:joinQuiz' %}"><article class="box-button">Join Quiz</article></a>
+		{% if request.user.is_authenticated %}
+			<a class="no-underline" href="{% url 'quizapp:createQuiz' %}"><article class="box-button">Create Quiz</article></a>
+		{% endif %}
+	</section>
+    
+	{% include "quizapp/partials/footer.html" %}
+
+</body>
+
+</html>
