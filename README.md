@@ -34,6 +34,8 @@ To work in a sandboxed Python environment it is recommended to install the app i
     $ ./manage.py test
     ```
 ## Features
+[Screen-recording of app](https://github.com/akanuragkumar/Live-Quiz-Platform/blob/master/screenrecording.mov)
+
       1. Sign Up/Log In.
       2. Create Quiz.
       3. Add questions, allot marking scheme and correct answer.
