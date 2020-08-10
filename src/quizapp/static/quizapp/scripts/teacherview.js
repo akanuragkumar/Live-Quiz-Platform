@@ -116,16 +116,6 @@ function setNextState() {
     }));
 }
 
-function playRap(audio){
-    audio.play();
-    audio.loop = true;
-}
-
-function stopRap(audio){
-    audio.pause();
-    audio.currentTime = 0;
-}
-
 function renderLanding(quizNameText, users) {
     clearPage();
     overlayHide();
@@ -578,7 +568,7 @@ function createNextUserPlacementsButton() {
     nextBox.setAttribute('class', 'next-button');
     nextBox.setAttribute('style', 'width: 10%; padding: 20px;');
     let nextText = document.createElement('p');
-    nextText.textContent = "User Placements";
+    nextText.textContent = "Current Standing";
     nextBox.appendChild(nextText);
     nextSection.appendChild(nextBox);
     main.appendChild(nextSection);
